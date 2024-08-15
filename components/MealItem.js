@@ -1,22 +1,33 @@
 import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import MealDetails from "./MealDetails";
 
-function MealItem({title, imageUrl, affordability, duration, complexity}){
-    return <View style={styles.mealItem}>
-        <Pressable android_ripple={{color:'#ccc'}} style={({pressed})=>pressed ? styles.buttonPressed : null}>
-            <View style={styles.innerContainer}>
-            <View>
-                <Image style={styles.image} source={{uri: imageUrl }} />
-            <Text style={styles.title}>{title}</Text>
-            </View>
+function MealItem({id, title, imageUrl, affordability, duration, complexity}){
 
-            <View style={styles.details}>
-                <Text style={styles.detailItem}>{duration}m</Text>
-                <Text style={styles.detailItem}>{complexity.toUpperCase()}</Text>
-                <Text style={styles.detailItem}>{affordability.toUpperCase()}</Text>
-            </View>
-            </View>
-        </Pressable>
-    </View>
+    const navigation = useNavigation();
+    const route = useRoute();
+
+    const catId = route.params.categoryId;
+
+    function selectMealItemHandler(){
+        
+        navigation.navigate('Meal Details', {
+        mealId: id,
+        catId:catId
+    });
+    }
+
+    return (
+        <View style={styles.mealItem}>
+            <Pressable onPress={selectMealItemHandler} android_ripple={{color:'#ccc'}} style={({pressed}) => pressed ? styles.buttonPressed : null}>
+                <View style={styles.innerContainer}>
+                    <Image style={styles.image} source={{uri: imageUrl}} />
+                    <Text style={styles.title}>{title}</Text>
+                </View>
+                <MealDetails affordability={affordability} complexity={complexity} duration={duration} />
+            </Pressable>
+        </View>
+    );
 }
 
 

@@ -1,13 +1,13 @@
 import { Image, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import MealDetails from "./MealDetails";
+import MealDetails from "../MealDetails";
 
 function MealItem({id, title, imageUrl, affordability, duration, complexity}){
 
     const navigation = useNavigation();
     const route = useRoute();
 
-    const catId = route.params.categoryId;
+    const catId = route.params?.categoryId || "";
 
     function selectMealItemHandler(){
         

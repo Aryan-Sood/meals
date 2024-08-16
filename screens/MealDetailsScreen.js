@@ -3,10 +3,12 @@ import { MEALS,CATEGORIES } from "@/data/dummy-data";
 import MealDetails from '../components/MealDetails';
 import Subtitle from '../components/MealDetail/Subtitle';
 import List from '../components/MealDetail/List';
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import IconButton from '../components/IconButton';
+import { FavoritesContext } from "@/store/context/favorites-context";
 
 function MealDetailsScreen({route, navigation}){
+    const favoriteMealsCtx = useContext(FavoritesContext);
     const mealId = route.params.mealId;
     const catId = route.params.catId;
 
@@ -14,18 +16,29 @@ function MealDetailsScreen({route, navigation}){
         meal.id === mealId
     )
 
-    const categoryTitle = CATEGORIES.find((category)=>category.id===catId).title;
+    const mealIsFavorite = favoriteMealsCtx.ids.includes(mealId);
 
-    function headerButtonPressHandler(){
-        console.log("Shared")
+    var categoryTitle = "";
+
+    if (catId!==""){
+        categoryTitle = CATEGORIES.find((category)=>category.id===catId).title;
+    }
+
+    function changeFavoriteStatusHandler(){
+        if (mealIsFavorite){
+            favoriteMealsCtx.removeFavorites(mealId);
+        }
+        else{
+            favoriteMealsCtx.addFavorites(mealId);
+        }
     }
 
     useLayoutEffect(()=> {
         navigation.setOptions({
-            headerBackTitle:categoryTitle,
-            headerRight: ()=> {return <IconButton icon='star' color='white' onPress={headerButtonPressHandler}/>}
+            headerBackTitle:categoryTitle === "" ? "Back" : categoryTitle,
+            headerRight: ()=> {return <IconButton icon={mealIsFavorite ? 'star' : 'star-outline'} color='white' onPress={changeFavoriteStatusHandler}/>}
         });
-    }),[navigation, headerButtonPressHandler];  
+    }),[navigation, changeFavoriteStatusHandler];  
 
     return (
         <ScrollView>

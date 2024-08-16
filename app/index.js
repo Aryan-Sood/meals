@@ -11,6 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import FavoritesContextProvider from "../store/context/favorites-context";
+import { Provider } from "react-redux";
+import {store} from '../store/redux/store';
 
 
 const Stack = createNativeStackNavigator();
@@ -30,7 +32,8 @@ export default function Index() {
   return (
     <>
     <StatusBar style="dark" />
-    <FavoritesContextProvider>
+    {/* <FavoritesContextProvider> */}
+    <Provider store={store}>
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Categories" screenOptions={{headerTintColor:'white', headerStyle:{backgroundColor:'#351401'} ,contentStyle:{backgroundColor:'#3f2f25'}}}>
         <Stack.Screen  name="Categories" component={DrawerHandler} options={{title:"All Categories", headerShown:false}}/>
@@ -38,7 +41,8 @@ export default function Index() {
         <Stack.Screen name="Meal Details" component={MealDetailsScreen} options={{headerBackTitle:'Back'}}/>
       </Stack.Navigator>
     </NavigationContainer>
-    </FavoritesContextProvider>
+    </Provider>
+    {/* </FavoritesContextProvider> */}
     </>
   );
 }
